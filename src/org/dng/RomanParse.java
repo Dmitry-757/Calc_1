@@ -64,6 +64,7 @@ public class RomanParse {
         return result;
     }
 
+    //не мое, но красиво )))
     static int Rome2Arab2(String roman) {
         String romanNum = roman.toUpperCase();
         int result = 0;
