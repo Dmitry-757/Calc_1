@@ -20,15 +20,17 @@ public class Main {
             //**** try to define Rome or Arab
             if (inputStr.matches("[MDCLXVI\\Q+-*/\\E]*")) { //все, что между \\Q и \\E экранируется
                 result = RomanParse.parse(inputStr);
+                System.out.println("Result of calculation is: "+RomanParse.Arab2Rome(result));
             } else if (inputStr.matches("[1234567890\\Q+-*/\\E]*")) {
                 result = ArabParse.parse(inputStr);
+                System.out.println("Result of calculation is: "+result);
             } else {
                 System.out.println("WTF?! Wrong input!");
                 throw new IllegalArgumentException("WTF?! Inputed digits isn't roman or arabian !");
             }
         } catch (IllegalArgumentException e) {
-            //e.printStackTrace();
             System.out.println(e.getMessage());
+            //e.printStackTrace();
         }
 
     }

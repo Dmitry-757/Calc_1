@@ -31,6 +31,8 @@ public class RomanParse {
     private String inValue;
     private double inNumber;
     private double currentNumber;
+    static int numbers[]  = {1, 4, 5, 9, 10, 50, 100, 500, 1000 };
+    static String letters[]  = { "I", "IV", "V", "IX", "X", "L", "C", "D", "M"};
 
 
     static int Rome2Arab(String roman){
@@ -63,24 +65,24 @@ public class RomanParse {
     }
 
     static int Rome2Arab2(String roman) {
-        String romanNumeral = roman.toUpperCase();
+        String romanNum = roman.toUpperCase();
         int result = 0;
 
         List romanNumerals = RomanNumeral.getReverseSortedValues();
 
         int i = 0;
 
-        while ((romanNumeral.length() > 0) && (i < romanNumerals.size())) {
+        while ((romanNum.length() > 0) && (i < romanNumerals.size())) {
             RomanNumeral symbol = (RomanNumeral) romanNumerals.get(i);
-            if (romanNumeral.startsWith(symbol.name())) {
+            if (romanNum.startsWith(symbol.name())) {
                 result += symbol.getValue();
-                romanNumeral = romanNumeral.substring(symbol.name().length());
+                romanNum = romanNum.substring(symbol.name().length());
             } else {
                 i++;
             }
         }
 
-        if (romanNumeral.length() > 0) {
+        if (romanNum.length() > 0) {
             throw new IllegalArgumentException(roman + " something wrong during conversion from roman 2 arabic");
         }
 
@@ -88,6 +90,23 @@ public class RomanParse {
 
     }
 
+
+    static String Arab2Rome(int number){
+//        int numbers[]  = {1, 4, 5, 9, 10, 50, 100, 500, 1000 };
+//        String letters[]  = { "I", "IV", "V", "IX", "X", "L", "C", "D", "M"};
+        String romanValue = "";
+        int N = number;
+        while ( N > 0 ){
+            for (int i = 0; i < numbers.length; i++){
+                if ( N < numbers[i] ){
+                    N -= numbers[i-1];
+                    romanValue += letters[i-1];
+                    break;
+                }
+            }
+        }
+        return romanValue;
+    }
 
     static int parse(String str){
         int arabNumber=0;
@@ -133,7 +152,10 @@ public class RomanParse {
             tmp=str.substring(lastEnd, str.length());
             //System.out.println("at pos "+lastEnd+" find "+str.charAt(m.start()));
             System.out.println("tmp = "+tmp);
-            arabNumber=Rome2Arab2(tmp);
+            if (tmp.length()>0) arabNumber=Rome2Arab2(tmp);
+            else arabNumber=0;
+
+
 
             System.out.println("last number = "+result);
             System.out.println("operDesignation "+opDesignation);

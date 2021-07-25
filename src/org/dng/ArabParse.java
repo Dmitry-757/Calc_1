@@ -55,7 +55,8 @@ public class ArabParse {
         //System.out.println("at pos "+lastEnd+" find "+str.charAt(m.start()));
         System.out.println("tmp = "+tmp);
 //        arabNumber=Rome2Arab2(tmp);
-        arabNumber=Integer.valueOf(tmp);
+        if (tmp.length()>0) arabNumber=Integer.valueOf(tmp);
+        else arabNumber=0;
 
 
         System.out.println("last number = "+result);
