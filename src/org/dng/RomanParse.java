@@ -5,14 +5,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-enum RomanNumeral {
+//*****************************************
+//не мое, но красиво )))
+enum RomanNumeralE {
     I(1), IV(4), V(5), IX(9), X(10),
     XL(40), L(50), XC(90), C(100),
     CD(400), D(500), CM(900), M(1000);
 
     private int value;
 
-    RomanNumeral(int value) {
+    RomanNumeralE(int value) {
         this.value = value;
     }
 
@@ -21,47 +23,58 @@ enum RomanNumeral {
     }
     public static List getReverseSortedValues() {
         return Arrays.stream(values())
-                .sorted(Comparator.comparing((RomanNumeral e) -> e.value).reversed())
+                .sorted(Comparator.comparing((RomanNumeralE e) -> e.value).reversed())
                 .collect(Collectors.toList());
     }
-
 }
+//*************************************
 
 public class RomanParse {
     private String inValue;
     private double inNumber;
     private double currentNumber;
-    static int numbers[]  = {1, 4, 5, 9, 10, 50, 100, 500, 1000 };
-    static String letters[]  = { "I", "IV", "V", "IX", "X", "L", "C", "D", "M"};
 
 
-    static int Rome2Arab(String roman){
-        int val=0;
-        int val_next=0;
-        int temp=0;
+    static int Rome2Arab(String rome) {
         int result=0;
-
-        for (int i=0;i<roman.length();i++) {
-//            val=value(roman.charAt(i));
-            val=RomanNumeral.valueOf(Character.toString(roman.charAt(i))).getValue();
-            if (i<roman.length()-1) {
-//                val_next=value(roman.charAt(i+1));
-                val_next=RomanNumeral.valueOf(Character.toString(roman.charAt(i+1))).getValue();;
-            } else val_next=0;
-
-            if (val_next==0) {
-                temp=val;
-            } else {
-                if (val>val_next) temp=val;
-                else if (val<val_next) {
-                    temp=val_next-val;
-                    i++;
-                } else if (val==val_next) temp=val;
+        int lastNum=RomanNumeral(rome.charAt(0));
+        int tekNum=0;
+        char ch;
+        for (int i = 0; i < rome.length(); i++){
+            ch = rome.charAt(i);
+            tekNum = RomanNumeral(ch);
+            if (tekNum == -1){
+//                throw new NumberFormatException("Invalid input numeral format ?");
+                throw new IllegalArgumentException("something wrong during conversion from roman 2 arabic");
             }
-            result+=temp;
+            if (lastNum == tekNum) result+=lastNum;
+            else if (lastNum>tekNum) result+=tekNum;
+            else if (lastNum<tekNum) result=tekNum-result;
+            lastNum=tekNum;
+
         }
-//        System.out.println("Result is: " + result);
         return result;
+    }
+
+    private static int RomanNumeral(char letter) {
+        switch (letter) {
+            case 'I':
+                return 1;
+            case 'V':
+                return 5;
+            case 'X':
+                return 10;
+            case 'L':
+                return 50;
+            case 'C':
+                return 100;
+            case 'D':
+                return 500;
+            case 'M':
+                return 1000;
+            default:
+                return -1;
+        }
     }
 
     //не мое, но красиво )))
@@ -69,12 +82,12 @@ public class RomanParse {
         String romanNum = roman.toUpperCase();
         int result = 0;
 
-        List romanNumerals = RomanNumeral.getReverseSortedValues();
+        List romanNumerals = RomanNumeralE.getReverseSortedValues();
 
         int i = 0;
 
         while ((romanNum.length() > 0) && (i < romanNumerals.size())) {
-            RomanNumeral symbol = (RomanNumeral) romanNumerals.get(i);
+            RomanNumeralE symbol = (RomanNumeralE) romanNumerals.get(i);
             if (romanNum.startsWith(symbol.name())) {
                 result += symbol.getValue();
                 romanNum = romanNum.substring(symbol.name().length());
@@ -92,9 +105,10 @@ public class RomanParse {
     }
 
 
+
     static String Arab2Rome(int number){
-//        int numbers[]  = {1, 4, 5, 9, 10, 50, 100, 500, 1000 };
-//        String letters[]  = { "I", "IV", "V", "IX", "X", "L", "C", "D", "M"};
+        int numbers[]  = {1, 4, 5, 9, 10, 50, 100, 500, 1000 };
+        String letters[]  = { "I", "IV", "V", "IX", "X", "L", "C", "D", "M"};
         String romanValue = "";
         int N = number;
         while ( N > 0 ){
@@ -113,7 +127,6 @@ public class RomanParse {
         int arabNumber=0;
         int result=0;
 
-//        if(str.matches("[MDCLXVI\\+\\-\\*\\/]*")  ){
 //        if(str.matches("[MDCLXVI\\Q+-*/\\E]*")  ){ //все, что между \\Q и \\E экранируется
             //System.out.println("str.matches passed");
 
@@ -127,46 +140,53 @@ public class RomanParse {
             Matcher m = p.matcher(INPUT);   // получение matcher объекта
 
             while (m.find()){
-                System.out.println("*********");
-                System.out.println("at pos "+m.start()+" find "+str.charAt(m.start()));
+
+                if (Main.debugMode) {
+                    System.out.println("*********");
+                    System.out.println("at pos " + m.start() + " find " + str.charAt(m.start()));
+                }
 
 
                 tmp=str.substring(lastEnd, m.start());
                 lastEnd=m.end();
-                System.out.println("tmp = "+tmp);
+                if (Main.debugMode) System.out.println("tmp = "+tmp);
 
-                arabNumber=Rome2Arab2(tmp);
-                System.out.println("last number = "+result);
-                System.out.println("operDesignation "+opDesignation);
-                System.out.println("Arab equals = "+arabNumber);
+//                arabNumber=Rome2Arab2(tmp);
+                arabNumber=Rome2Arab(tmp);
+                if (Main.debugMode) {
+                    System.out.println("last number = " + result);
+                    System.out.println("operDesignation " + opDesignation);
+                    System.out.println("Arab equals = " + arabNumber);
+                }
 
 
                 result=Calc.Calculate(result, arabNumber, opDesignation);
-                System.out.println("result = "+result);
+                if (Main.debugMode) System.out.println("result = "+result);
 
                 opDesignation=str.charAt(m.start());
 
-                System.out.println("*********");
+                if (Main.debugMode) System.out.println("*********");
             }
 
-            System.out.println("*********");
-            tmp=str.substring(lastEnd, str.length());
-            //System.out.println("at pos "+lastEnd+" find "+str.charAt(m.start()));
-            System.out.println("tmp = "+tmp);
+            if (Main.debugMode) System.out.println("*********");
+//            tmp=str.substring(lastEnd, str.length()-1);
+            tmp=str.substring(lastEnd);
+            if (Main.debugMode) System.out.println("tmp = "+tmp);
             if (tmp.length()>0) arabNumber=Rome2Arab2(tmp);
             else arabNumber=0;
+            if (arabNumber == 0) throw new IllegalArgumentException("WTF?! input must contain numbers from I to X !");
 
 
-
-            System.out.println("last number = "+result);
-            System.out.println("operDesignation "+opDesignation);
-            System.out.println("Arab equals = "+arabNumber);
-
+            if (Main.debugMode) {
+                System.out.println("last number = " + result);
+                System.out.println("operDesignation " + opDesignation);
+                System.out.println("Arab equals = " + arabNumber);
+            }
             result=Calc.Calculate(result, arabNumber, opDesignation);
-            System.out.println("result = "+result);
-
-            System.out.println("*********");
-
+            if (Main.debugMode) {
+                System.out.println("result = " + result);
+                System.out.println("*********");
+            }
 //        }
 /*
         else{

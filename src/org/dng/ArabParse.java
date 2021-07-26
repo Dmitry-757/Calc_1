@@ -13,7 +13,7 @@ public class ArabParse {
 
 
 
-    static int parse(String str){
+    static int parse(String str) throws IllegalArgumentException {
         int arabNumber=0;
         int result=0;
 
@@ -28,46 +28,48 @@ public class ArabParse {
         Matcher m = p.matcher(INPUT);   // получение matcher объекта
 
         while (m.find()){
-            System.out.println("*********");
-            System.out.println("at pos "+m.start()+" find "+str.charAt(m.start()));
-
+            if (Main.debugMode) {
+                System.out.println("*********");
+                System.out.println("at pos " + m.start() + " find " + str.charAt(m.start()));
+            }
 
             tmp=str.substring(lastEnd, m.start());
             lastEnd=m.end();
-            System.out.println("tmp = "+tmp);
+            if (Main.debugMode) System.out.println("tmp = "+tmp);
 
             arabNumber=Integer.valueOf(tmp);
-            System.out.println("last number = "+result);
-            System.out.println("operDesignation "+opDesignation);
-            System.out.println("Arab equals = "+arabNumber);
+            if (arabNumber == 0) throw new IllegalArgumentException("WTF?! input must contain integer numbers from 1 to 10 !");
 
-
+            if (Main.debugMode) {
+                System.out.println("last number = " + result);
+                System.out.println("operDesignation " + opDesignation);
+                System.out.println("Arab equals = " + arabNumber);
+            }
             result=Calc.Calculate(result, arabNumber, opDesignation);
-            System.out.println("result = "+result);
+            if (Main.debugMode) System.out.println("result = "+result);
 
             opDesignation=str.charAt(m.start());
 
-            System.out.println("*********");
+            if (Main.debugMode) System.out.println("*********");
         }
 
-        System.out.println("*********");
+        if (Main.debugMode) System.out.println("*********");
         tmp=str.substring(lastEnd, str.length());
-        //System.out.println("at pos "+lastEnd+" find "+str.charAt(m.start()));
-        System.out.println("tmp = "+tmp);
-//        arabNumber=Rome2Arab2(tmp);
+        if (Main.debugMode) System.out.println("tmp = "+tmp);
         if (tmp.length()>0) arabNumber=Integer.valueOf(tmp);
         else arabNumber=0;
+        if (arabNumber == 0) throw new IllegalArgumentException("WTF?! input must contain integer numbers from 1 to 10 !");
 
-
-        System.out.println("last number = "+result);
-        System.out.println("operDesignation "+opDesignation);
-        System.out.println("Arab equals = "+arabNumber);
-
+        if (Main.debugMode) {
+            System.out.println("last number = " + result);
+            System.out.println("operDesignation " + opDesignation);
+            System.out.println("Arab equals = " + arabNumber);
+        }
         result=Calc.Calculate(result, arabNumber, opDesignation);
-        System.out.println("result = "+result);
-
-        System.out.println("*********");
-
+        if (Main.debugMode) {
+            System.out.println("result = " + result);
+            System.out.println("*********");
+        }
 //        }
 /*
         else{
