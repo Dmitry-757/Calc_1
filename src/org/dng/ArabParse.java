@@ -19,6 +19,8 @@ public class ArabParse {
 
 
         //**** делаем расчленинград исходной строки на числа и знаки операций ***
+        //**** правильный порядок выполнения арифметических операций "не задавали" -
+        //**** поэтому случаи из ряда а+б*с и (а+б)*с будут считаться не правильно (((
         String tmp;
         int lastEnd=0;
         char opDesignation='+';
@@ -70,13 +72,6 @@ public class ArabParse {
             System.out.println("result = " + result);
             System.out.println("*********");
         }
-//        }
-/*
-        else{
-            System.out.println("WTF?! Wrong roman digits!");
-            throw new IllegalArgumentException("WTF?! Inputed digits isn't roman !");
-        }
-*/
 
         return result;
     }
