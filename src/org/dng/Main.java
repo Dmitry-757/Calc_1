@@ -29,7 +29,7 @@ public class Main {
                 System.out.println("Result of calculation is: "+result);
             } else {
                 System.out.println("WTF?! Wrong input!");
-                throw new IllegalArgumentException("WTF?! please input roman number from I to X or integer number from 1 to 10  !");
+                throw new IllegalArgumentException("WTF?! please use roman number from I to X or integer number from 1 to 10 and designation of arithmetical operation !");
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
